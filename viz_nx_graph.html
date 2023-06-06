@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 1800px;
+            height: 900px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"class": "core.Temperature", "color": "#2ba02b", "id": "wonka.TB_temperature1", "label": "wonka:TB_temperature1", "nodeType": "instance", "shape": "box", "shapeProperties": {"borderDashes": [5, 5]}, "size": 10, "status": "ok", "style": "dashed", "use": true}, {"class": "core.Temperature", "color": "#2ba02b", "id": "wonka.TB_env_outside_temperature", "label": "wonka:TB_env_outside_temperature", "nodeType": "instance", "shape": "box", "shapeProperties": {"borderDashes": [5, 5]}, "size": 10, "status": "ok", "style": "dashed", "use": true}, {"class": "core.TemperatureSensor", "color": "#2ba02b", "id": "wonka.TB_sensor_temperature1", "label": "wonka:TB_sensor_temperature1", "nodeType": "instance", "shape": "box", "shapeProperties": {"borderDashes": [5, 5]}, "size": 10, "status": "ok", "style": "dashed", "use": true}, {"class": "wonka.Approach_to_Validate", "color": "#2ba02b", "id": "wonka.approach_to_validate_Unsupervised_Process_Identification", "label": "wonka:approach_to_validate_Unsupervised_Process_Identification", "nodeType": "instance", "shape": "box", "shapeProperties": {"borderDashes": [5, 5]}, "size": 10, "status": "ok", "style": "dashed", "use": true}, {"class": "saref4inma.Factory", "color": "#2ba02b", "id": "wonka.VEHICLE_TESTBED", "label": "wonka:VEHICLE_TESTBED", "nodeType": "instance", "shape": "box", "shapeProperties": {"borderDashes": [5, 5]}, "size": 10, "status": "ok", "style": "dashed", "use": true}, {"class": "wonka.Disturbance", "color": "#2ba02b", "id": "wonka.TB_env_outside", "label": "wonka:TB_env_outside", "nodeType": "instance", "shape": "box", "shapeProperties": {"borderDashes": [5, 5]}, "size": 10, "status": "ok", "style": "dashed", "use": true}]);
+        edges = new vis.DataSet([{"arrows": "to", "color": "#d62628", "dashes": false, "exists": true, "from": "wonka.TB_temperature1", "label": "saref:consistsOf", "mustExist": false, "nodeType": "var2var", "status": "del", "to": "wonka.TB_env_outside_temperature", "use": true, "weight": "saref:consistsOf"}, {"arrows": "to", "color": "#2ba02b", "dashes": false, "exists": true, "from": "wonka.TB_sensor_temperature1", "label": "saref:hasProperty", "mustExist": true, "nodeType": "var2var", "status": "ok", "to": "wonka.TB_temperature1", "use": true, "weight": "saref:hasProperty"}, {"arrows": "to", "color": "#2ba02b", "dashes": false, "exists": true, "from": "wonka.TB_sensor_temperature1", "label": "saref:accomplishes", "mustExist": true, "nodeType": "var2var", "status": "ok", "to": "wonka.approach_to_validate_Unsupervised_Process_Identification", "use": true, "weight": "saref:accomplishes"}, {"arrows": "to", "color": "#2ba02b", "dashes": false, "exists": true, "from": "wonka.VEHICLE_TESTBED", "label": "saref:consistsOf", "mustExist": true, "nodeType": "var2var", "status": "ok", "to": "wonka.TB_sensor_temperature1", "use": true, "weight": "saref:consistsOf"}, {"arrows": "to", "color": "#2ba02b", "dashes": false, "exists": true, "from": "wonka.VEHICLE_TESTBED", "label": "wonka:consistsOf_environment", "mustExist": true, "nodeType": "var2var", "status": "ok", "to": "wonka.TB_env_outside", "use": true, "weight": "wonka:consistsOf_environment"}, {"arrows": "to", "color": "#2ba02b", "dashes": false, "exists": true, "from": "wonka.TB_env_outside", "label": "saref:hasProperty", "mustExist": true, "nodeType": "var2var", "status": "ok", "to": "wonka.TB_env_outside_temperature", "use": true, "weight": "saref:hasProperty"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
