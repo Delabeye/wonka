@@ -8,7 +8,7 @@ def viz_nx_graph(
     height="900px",
     width="1800px",
     relabel=True,
-    save_as: str = None,
+    save_as: Path | str = None,
 ):
     if relabel:
         for n, data in nx_graph.nodes(data=True):
@@ -21,5 +21,13 @@ def viz_nx_graph(
     nt.set_edge_smooth("dynamic")
     if buttons:
         nt.show_buttons()
-    save_as = "viz_nx_graph" if save_as is None else save_as
-    nt.show(f"{save_as}.html")
+    if isinstance(save_as, Path | str):
+        save_as = str(save_as)
+        save_as = save_as if save_as.endswith(".html") else save_as + ".html"
+    else:
+        save_as = "viz_nx_graph.html"
+    filename = Path(save_as).name
+    nt.show(filename) # TODO save to location directly; do not open
+    time.sleep(.01) # wait for the file to be created
+    shutil.move(Path("./")/filename, save_as)
+    # webbrowser.open(save_as)

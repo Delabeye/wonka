@@ -33,14 +33,15 @@ NOTE
 
 """
 
-
 ### Local
+from wonka import ROOTDIR
 from wonka.utils import *
 from wonka.visualisation import viz_nx_graph
 from wonka.query import Query, sparql
 
-path_to_owl = Path(__file__).parent.parent / "data/SAM2022/ontology/labsys_selection/wonka.owl"
-path_to_queries = Path(__file__).parent.parent / "data/SAM2022/query/requirements_BSSapproach"
+path_to_owl = ROOTDIR / "data/wonka_case_study/ontology/wonka.owl"
+path_to_queries = ROOTDIR / "data/wonka_case_study/query"
+path_to_results = ROOTDIR / "data/wonka_case_study/results"
 
 world = default_world
 onto = world.get_ontology(str(path_to_owl)).load()
@@ -60,8 +61,8 @@ from wonka.representation import KnowledgeGraph
 KG = KnowledgeGraph(onto)
 
 if disp_KG := True:
-    print(str(KG))
-    viz_nx_graph(KG, save_as="KG")
+    print(f"Knowledge Graph: {str(KG)}")
+    viz_nx_graph(KG, save_as=path_to_results / "KG")
 
 
 ####################################################
@@ -94,8 +95,8 @@ ind_systems = {
 
 if disp_subkgs := True:
     for skg_id, SKG in subkgs.items():
-        print(skg_id, str(SKG))
-        viz_nx_graph(SKG, save_as=skg_id)
+        print(f"Subgraph {skg_id}: {str(SKG)}")
+        viz_nx_graph(SKG, save_as=path_to_results / skg_id)
 
 ####################################################
 ###
@@ -107,47 +108,61 @@ from wonka.metrics import HeterogeneousLinSimilarity
 
 sim = HeterogeneousLinSimilarity(onto)
 
-if study_wonka_intrinsic_similarity := False:
+if study_wonka_intrinsic_similarity := True:
+    print("\n\nSemantic similarity:\n")
+
     lab_systems_labels = [
         "wonka.LABORATORY_CoffeeMachine",
         "wonka.LABORATORY_3Dprinter",
         "wonka.LABORATORY_6axisRobot",
     ]
-    lab_systems = [subkgs[s] for s in lab_systems_labels]
+    # lab_systems = [subkgs[s] for s in lab_systems_labels]
+    lab_systems = {s: subkgs[s] for s in lab_systems_labels}
 
     ind_systems_labels = ["wonka.CHOCOLATE_FACTORY", "wonka.VEHICLE_TESTBED"]
-    ind_systems = [subkgs[s] for s in ind_systems_labels]
+    # ind_systems = [subkgs[s] for s in ind_systems_labels]
+    ind_systems = {s: subkgs[s] for s in ind_systems_labels}
 
-    # ### indsys vs labsys
-    # indlabsys_matrix = np.matrix(
-    #     [[sim.sim_subkgs([sys1, sys2]) for sys2 in lab_systems] for sys1 in ind_systems]
-    # )
-    # df_indlabsys = pd.DataFrame(
-    #     indlabsys_matrix, columns=lab_systems_labels, index=pd.Index(ind_systems_labels)
-    # )
-    # ic(df_indlabsys)
+    ### indsys vs labsys
+    indlabsys_matrix = np.matrix(
+        [
+            [sim.sim_subkgs([sys1, sys2]) for sys2 in lab_systems.values()]
+            for sys1 in ind_systems.values()
+        ]
+    )
+    df_indlabsys = pd.DataFrame(
+        indlabsys_matrix, columns=lab_systems_labels, index=pd.Index(ind_systems_labels)
+    )
+    print(tabulate(df_indlabsys, headers="keys", tablefmt="psql"))
 
-    # ### labsys vs labsys
-    # labsys_matrix = np.matrix(
-    #     [[sim.sim_subkgs([sys1, sys2]) for sys2 in lab_systems] for sys1 in lab_systems]
-    # )
-    # df_labsys = pd.DataFrame(
-    #     labsys_matrix, columns=lab_systems_labels, index=pd.Index(lab_systems_labels)
-    # )
+    ### labsys vs labsys
+    labsys_matrix = np.matrix(
+        [
+            [sim.sim_subkgs([sys1, sys2]) for sys2 in lab_systems.values()]
+            for sys1 in lab_systems.values()
+        ]
+    )
+    df_labsys = pd.DataFrame(
+        labsys_matrix, columns=lab_systems_labels, index=pd.Index(lab_systems_labels)
+    )
+    print(tabulate(df_labsys, headers="keys", tablefmt="psql"))
 
     ### indsys vs indsys
     indsys_matrix = np.matrix(
-        [[sim.sim_subkgs([sys1, sys2]) for sys2 in ind_systems] for sys1 in ind_systems]
+        [
+            [sim.sim_subkgs([sys1, sys2]) for sys2 in ind_systems.values()]
+            for sys1 in ind_systems.values()
+        ]
     )
     df_indsys = pd.DataFrame(
         indsys_matrix, columns=ind_systems_labels, index=pd.Index(ind_systems_labels)
     )
-    ic(df_indsys)
+    print(tabulate(df_indlabsys, headers="keys", tablefmt="psql"))
 
-    # ### --- save ---
-    # df_labsys.to_csv("labsys_vs_labsys.csv", sep="\t", mode="w")
-    # df_indsys.to_csv("indsys_vs_indsys.csv", sep="\t", mode="w")
-    # df_indlabsys.to_csv("indsys_vs_labsys.csv", sep="\t", mode="w")
+    ### --- save ---
+    df_labsys.to_csv(path_to_results / "labsys_vs_labsys.csv", sep="\t", mode="w")
+    df_indsys.to_csv(path_to_results / "indsys_vs_indsys.csv", sep="\t", mode="w")
+    df_indlabsys.to_csv(path_to_results / "indsys_vs_labsys.csv", sep="\t", mode="w")
 
 
 """ ------------------------------------------------ """
@@ -167,14 +182,14 @@ query = Query(path_to_queries / f"req_{ID_query}_ok.rq")
 
 qKG = QueryGraph(query)
 
-if disp_qKG := False:
-    print(qKG)
-    viz_nx_graph(qKG.disp_view())
-    viz_nx_graph(qKG.fold_class().disp_view())
-    # viz_nx_graph(qKG)
-    # viz_nx_graph(qKG.fold_class(True).unfold_class(True).disp_view())
-    # viz_nx_graph(qKG.fold_class().unfold_class().disp_view())
-    # viz_nx_graph(qKG.fold_class(True).disp_view())
+if disp_qKG := True:
+    print("\n\nQuery Knowledge Graph:")
+    print(f"req_{ID_query}_ok.rq : {qKG}")
+    viz_nx_graph(qKG.disp_view(), save_as=path_to_results / f"qKG_{ID_query}_ok")
+    viz_nx_graph(
+        qKG.fold_class().disp_view(),
+        save_as=path_to_results / f"qKG_{ID_query}_ok_folded",
+    )
 
 
 ####################################################
@@ -184,12 +199,12 @@ if disp_qKG := False:
 
 qres = sparql(query, world)
 
-# # restrict the query to a specific subgraph
+### Restrict the query to a specific subgraph
 # qres = sparql(query, world, kg=subkgs["wonka.CHOCOLATE_FACTORY"])
 # qres = sparql(query, world, kg=subkgs["wonka.VEHICLE_TESTBED"])
 
 if disp_query_results := True:
-    ic(qres)
+    print(tabulate(qres, headers="keys", tablefmt="psql"))
 
 
 ####################################################
@@ -200,10 +215,15 @@ if disp_query_results := True:
 qKG_inst = qKG.instantiate(qres, KG)
 qKG_inst_without_KG = qKG.instantiate(qres)
 
-if disp_qKG := False:
-    print(qKG_inst)
-    viz_nx_graph(qKG_inst.disp_view())
-    viz_nx_graph(qKG_inst_without_KG.disp_view())
+if disp_qKG := True:
+    print(f"req_{ID_query}_ok.rq: {qKG_inst}")
+    viz_nx_graph(
+        qKG_inst.disp_view(), save_as=path_to_results / f"qKG_{ID_query}_instantiated"
+    )
+    viz_nx_graph(
+        qKG_inst_without_KG.disp_view(),
+        save_as=path_to_results / f"qKG_{ID_query}_withoutKG",
+    )
 
 """ ------------------------------------------------ """
 """ ------------------   STEP 3   ------------------ """
@@ -224,9 +244,9 @@ query_NOK = Query(path_to_queries / f"req_{ID_query}_nok.rq")
 qKGok = QueryGraph(query_OK).fold_class()
 qKGnok = QueryGraph(query_NOK).fold_class()
 
-if disp_qKGok_qKGnok := False:
-    viz_nx_graph(qKGok.disp_view())
-    viz_nx_graph(qKGnok.disp_view())
+if disp_qKGok_qKGnok := True:
+    viz_nx_graph(qKGok.disp_view(), save_as=path_to_results / f"qKG_{ID_query}_ok")
+    viz_nx_graph(qKGnok.disp_view(), save_as=path_to_results / f"qKG_{ID_query}_nok")
 
 
 ####################################################
@@ -235,13 +255,13 @@ if disp_qKGok_qKGnok := False:
 ###
 
 qres_nok = sparql(query_NOK, world)
-qres_nok.to_csv("query_result.csv", sep="\t", mode="w")
+qres_nok.to_csv(path_to_results / "query_result.csv", sep="\t", mode="w")
 
 qKGhelper = qKGok.solve(qres_nok, KG, onto)
 
-if disp_qKGhelper := False:
-    print(qKGhelper)
-    viz_nx_graph(qKGhelper)
+if disp_qKGhelper := True:
+    print(f"Helper graph for req_{ID_query}: {qKGhelper}")
+    viz_nx_graph(qKGhelper, save_as=path_to_results / f"qKG_{ID_query}_helper")
 
 ####################################################
 ###
@@ -251,10 +271,9 @@ if disp_qKGhelper := False:
 qKGok = QueryGraph(query_OK).fold_class()
 projKG = KG.project_query_graph(qKGok, qres_nok, inplace=False)
 
-if disp_projKG := False:
-    print(projKG)
-    viz_nx_graph(projKG)
-    # viz_nx_graph(KG)
+if disp_projKG := True:
+    print(f"Projection of req_{ID_query} onto KG: {projKG}")
+    viz_nx_graph(projKG, save_as=path_to_results / f"qKG_{ID_query}_projected_on_KG")
 
 """ ------------------------------------------------ """
 """ ------------------   STEP 4   ------------------ """
@@ -267,6 +286,8 @@ if disp_projKG := False:
 
 
 from wonka.metrics import ValidationMetric
+
+print("\n\nValidation metrics:")
 
 val = ValidationMetric(world)
 
@@ -292,7 +313,6 @@ degree_of_validation = {
 }
 df_validation = pd.DataFrame(degree_of_validation)
 
-
 degree_of_scalability = {
     lab: {
         ind: val.degree_of_scalability(all_queries, (lab_kg, ind_kg))["valid_rows"]
@@ -303,8 +323,12 @@ degree_of_scalability = {
 df_scalability = pd.DataFrame(degree_of_scalability)
 
 if disp_vnv_metrics := True:
-    ic(df_validation)
-    ic(df_scalability)
+    print(
+        "\nValidation rates (ratio of valid requirements or elements satisfying these requirements):\n"
+    )
+    print(tabulate(df_validation, headers="keys", tablefmt="psql"))
+    print("\nScalability rate (similarity between validation rates):\n")
+    print(tabulate(df_scalability, headers="keys", tablefmt="psql"))
 
 ####################################################
 print("Done.")

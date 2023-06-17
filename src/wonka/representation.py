@@ -220,7 +220,7 @@ class QueryGraph(nx.MultiDiGraph):
             _Token = pq
             _meta["mustExist"] = True
 
-        if isinstance(_Token, (ParseResults, plist)):
+        if isinstance(_Token, (ParseResults, list)):
             ### Update from triples
             for tok in _Token:
                 if getattr(tok, "name", None) == "TriplesBlock":

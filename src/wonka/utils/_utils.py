@@ -6,51 +6,37 @@ General purpose classes, functions, global variables and imports
 
 ### Local
 
-from wonka._utils._type_utils import *
-from wonka._utils._text_formatting import *
-from wonka._utils._graph_formatting import *
+from wonka.utils._type_utils import *
+from wonka.utils._text_formatting import *
+from wonka.utils._graph_formatting import *
 
 ###
 
-
-from abc import ABC, ABCMeta, abstractmethod, abstractproperty
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 import os, sys
-import shutil, uuid
-import inspect
+import shutil
 from pathlib import Path
+import webbrowser
 import pprint
-
-import cloudpickle as pickle
+import re
 import copy
 import time
-
-from operator import itemgetter, attrgetter
-import itertools, functools
-
-import re
-
-import matplotlib
-
-matplotlib.use("Qt5Agg")
-
-import matplotlib.pyplot as plt
 
 from owlready2 import *
 import rdflib
 
 import numpy as np
 import pandas as pd
-from scipy import stats
+from tabulate import tabulate
 
 from pyvis.network import Network
 import networkx as nx
 
-# Dev only
-from icecream import ic, install
+# # Dev only
+# from icecream import ic, install
 
-install()  # icecream
+# install()  # icecream
 
 
 """
@@ -182,7 +168,7 @@ class Logger:
                         print("\n".join(traceback.format_stack()[:-2]))
                         exit()
                 else:
-                    ic(disp_msg)
+                    print(disp_msg)
                     exit()
                     for dmsg in disp_msg:
                         getattr(self.logger, logtype)(dmsg, *args, **kwargs)
