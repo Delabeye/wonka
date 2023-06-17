@@ -1,6 +1,6 @@
 # Verification and Validation with an ONtology and Knowledge-based Approach (WONKA)
 
-This is an Owleardy2 implementation of the WONKA methodology, as described in our paper:
+This is an implementation of the WONKA methodology using `Owlready2` and `rdflib` libraries, as described in our paper:
 
 Delabeye, R., Penas, O., & Plateaux, R. (2022, October). [Scalable ontology-based V&V process for heterogeneous systems and applications](https://hal.science/hal-03912273/document). In Proceedings of the 25th International Conference on Model Driven Engineering Languages and Systems: Companion Proceedings (pp. 341-350).
 
