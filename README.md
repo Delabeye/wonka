@@ -1,10 +1,10 @@
 # Verification and Validation with an ONtology and Knowledge-based Approach (WONKA)
 
-This is an Owleardy2 implementation of the WONKA methodology, as described in our paper:
+This is an implementation of the WONKA methodology using `Owlready2` and `rdflib` libraries, as described in our paper:
 
 Delabeye, R., Penas, O., & Plateaux, R. (2022, October). [Scalable ontology-based V&V process for heterogeneous systems and applications](https://hal.science/hal-03912273/document). In Proceedings of the 25th International Conference on Model Driven Engineering Languages and Systems: Companion Proceedings (pp. 341-350).
 
-![mbse_wonka_whitebkg](https://github.com/Delabeye/wonka/assets/46192455/b753d0a1-b339-48ea-8096-80fcf2d7ed1b)
+![mbse_wonka_whitebkg](case_study/fig/mbse_wonka_whitebkg.png)
 
 A more detailed description of the case study is presented in the [S.mart benchmark repository](https://github.com/GIS-S-mart), where a dedicated benchmark on [Early Verification and Validation](https://github.com/GIS-S-mart/Benchmark-1_MBSE_for_Early_Validation_and_Verification) is presented.
 
@@ -38,7 +38,7 @@ The ontology should be instantiated according to the blueprint presented in the 
 
 ## Cite
 
-Please cite our paper if you use this code in your work:
+Please cite our paper if you use this code or methodology in your work:
 
 ```
 @inproceedings{delabeye2022scalable,
