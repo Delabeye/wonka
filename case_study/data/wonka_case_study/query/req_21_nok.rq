@@ -1,0 +1,60 @@
+#	ID:		2.1
+# 	Expect:	NOK
+#	
+#	Requirement: 	"The approach to validate should estimate the process sequences (operations & actuators) accurately, according to a performance threshold."
+#	Expect result:	"Approach to validate (with defined accuracy threshold) not satisfying requirement."
+#
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#> 
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX saref: <https://saref.etsi.org/core/>
+PREFIX s4bldg: <https://saref.etsi.org/saref4bldg/>
+PREFIX s4inma: <https://saref.etsi.org/saref4inma/>
+PREFIX wonka: <http://localhost/wonka#> 
+
+SELECT DISTINCT ?platform ?sys ?task ?output ?output_accuracy ?req_accuracy_val ?req_accuracy ?req ?atv # ?output_accuracy_val
+
+WHERE {	
+
+	# System of interest accomplishes task
+	?platform a s4bldg:Building .
+	?sys a saref:Device .
+	?task a saref:Task .
+
+	?platform wonka:consistsOf_system_of_interest ?sys .
+	?sys saref:accomplishes ?task .
+	
+	# Approach to validate, in cooperation with another task, has output accuracy
+	?atv a wonka:Approach_to_Validate .
+	?output a wonka:Output .
+	?output_accuracy a wonka:Accuracy .
+
+	?task s4inma:hasFeatureOfInterest ?output .
+	?atv s4inma:hasFeatureOfInterest ?output .
+	?output saref:hasProperty ?output_accuracy .
+
+	# ATV has corresponding requirement accuracy (with value)
+	?req a wonka:Requirement .
+	?req_accuracy a wonka:Accuracy .
+
+	?atv s4inma:hasFeatureOfInterest ?req .
+	?req saref:hasProperty ?req_accuracy .
+	?req_accuracy saref:hasValue ?req_accuracy_val .
+	
+
+	# Output and Requirement relate
+	?req_accuracy wonka:sameSettingAs ?output_accuracy .
+
+	FILTER NOT EXISTS {
+
+		# Output has accuracy value
+		?output_accuracy saref:hasValue ?output_accuracy_val .
+		
+		
+		# The accuracy obtained on the experiment must be greater than the accuracy threshold
+		FILTER (?output_accuracy_val >= ?req_accuracy_val)
+	
+	}
+
+}

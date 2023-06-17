@@ -1,0 +1,48 @@
+#	ID:		3.1
+# 	Expect:	NOK
+#	
+#	Requirement: 	"For each actuator within the system of interest, there must be at least one sensor monitoring an observable property this actuator affects."
+#	Expect result:	"actuators not satisfying requirement"
+#
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#> 
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX saref: <https://saref.etsi.org/core/>
+PREFIX s4bldg: <https://saref.etsi.org/saref4bldg/>
+PREFIX s4inma: <https://saref.etsi.org/saref4inma/>
+PREFIX wonka: <http://localhost/wonka#> 
+
+SELECT DISTINCT * # ?platform ?sys ?actuator # ?actprop ?sensprop ?sensor
+
+WHERE {
+
+	# Actuators within system of interest
+	?platform a s4bldg:Building .
+	?sys a saref:Device .
+   	?actuator a saref:Actuator . 
+	
+	
+	
+	?platform wonka:consistsOf_system_of_interest ?sys .
+	?sys saref:consistsOf ?actuator .
+
+	FILTER NOT EXISTS {
+
+		# Actuator-induced properties
+		?actprop a saref:Property . 
+
+		?actuator saref:controlsProperty ?actprop .
+
+		# Sensed properties
+		?sensor a saref:Sensor . 
+		?sensprop a saref:Property .
+
+		?platform saref:consistsOf ?sensor .
+		?sensor saref:measuresProperty ?sensprop .
+
+		# Actuator-induced property contributes to Sensed property
+		?sensprop saref:consistsOf ?actprop .
+	}
+
+} 

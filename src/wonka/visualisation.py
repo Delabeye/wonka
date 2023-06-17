@@ -27,7 +27,8 @@ def viz_nx_graph(
     else:
         save_as = "viz_nx_graph.html"
     filename = Path(save_as).name
-    nt.show(filename) # TODO save to location directly; do not open
+    # TODO save to location directly; do not open (default in nt.show())
+    nt.show(filename, notebook=False)
     time.sleep(.01) # wait for the file to be created
     shutil.move(Path("./")/filename, save_as)
     # webbrowser.open(save_as)

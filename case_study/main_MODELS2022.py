@@ -34,14 +34,13 @@ NOTE
 """
 
 ### Local
-from wonka import ROOTDIR
 from wonka.utils import *
 from wonka.visualisation import viz_nx_graph
 from wonka.query import Query, sparql
 
-path_to_owl = ROOTDIR / "data/wonka_case_study/ontology/wonka.owl"
-path_to_queries = ROOTDIR / "data/wonka_case_study/query"
-path_to_results = ROOTDIR / "data/wonka_case_study/results"
+path_to_owl = Path(__file__).parent / "data/wonka_case_study/ontology/wonka.owl"
+path_to_queries = Path(__file__).parent / "data/wonka_case_study/query"
+path_to_results = Path(__file__).parent / "data/wonka_case_study/results"
 
 world = default_world
 onto = world.get_ontology(str(path_to_owl)).load()
