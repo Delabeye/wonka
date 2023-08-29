@@ -38,7 +38,7 @@ The ontology should be instantiated according to the blueprint presented in the 
 
 ## Cite
 
-Please cite our paper if you use this code or methodology in your work:
+Please consider citing our paper if you use this code or methodology in your work:
 
 ```
 @inproceedings{delabeye2022scalable,
