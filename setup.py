@@ -3,11 +3,9 @@ Project structure based on https://github.com/pypa/sampleproject.git
 """
 
 from setuptools import setup, find_packages
-import git
 
 
-repo = git.Repo(".", search_parent_directories=True)
-repo_name = repo.remotes.origin.url.split(".git")[0].split("/")[-1]
+repo_name = "wonka"
 
 setup(
     name=repo_name,

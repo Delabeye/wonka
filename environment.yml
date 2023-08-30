@@ -16,9 +16,6 @@ dependencies:
   - expat=2.4.9=h6a678d5_0
   - gdbm=1.18=hd4cb3f1_4
   - gettext=0.21.0=hf68c758_0
-  - git=2.40.1=pl5340hd969cb8_0
-  - gitdb=4.0.10=pyhd8ed1ab_0
-  - gitpython=3.1.31=pyhd8ed1ab_0
   - icu=58.2=he6710b0_3
   - importlib-metadata=6.6.0=pyha770c72_0
   - intel-openmp=2023.1.0=hdb19cb5_46305
