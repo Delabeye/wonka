@@ -1,0 +1,34 @@
+### TEST
+# some text
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#> 
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX onto: <http://localhost/onto#>
+
+
+SELECT DISTINCT *
+
+WHERE {
+
+	?x1 rdf:type sosa:Class1 .
+
+	?x3 rdf:type sosa:Class3 .
+
+    ?x1 onto:affects ?x2 .
+
+	FILTER NOT EXISTS {
+
+        ?x3 rdf:type sosa:Class1 .
+        ?x2 rdf:type sosa:Class1 .
+
+        ?x2 onto:affects ?x3 .
+
+        FILTER NOT EXISTS {
+            ?x3 onto:affects ?x2 .
+        }
+
+		FILTER (?x1 >= 2 * ?x2)
+
+	}
+}

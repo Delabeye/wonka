@@ -1,0 +1,48 @@
+#	ID:		4.1
+# 	Expect:	NOK
+#	
+#	Requirement: 	"What are the elements of the environment that may temper with the results of the approach to validate?"
+#	Expect result:	"Elements that do not satisfy."
+#
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#> 
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX saref: <https://saref.etsi.org/core/>
+PREFIX s4bldg: <https://saref.etsi.org/saref4bldg/>
+PREFIX s4inma: <https://saref.etsi.org/saref4inma/>
+PREFIX wonka: <http://localhost/wonka#> 
+
+SELECT DISTINCT ?atv ?environment_entity ?property_environment ?property_device4atv ?platform_entity ?platform
+
+WHERE {
+
+	# Approach to validate
+	?atv a wonka:Approach_to_Validate .
+
+	# Platform
+	?platform a s4bldg:Building .
+	
+	# Property of the environment
+	?platform wonka:consistsOf_environment ?environment_entity .
+	?environment_entity saref:hasProperty ?property_environment .
+
+	# [hint]
+	?environment_entity a saref:FeatureOfInterest .
+	?property_environment a saref:Property .
+	?platform_entity a saref:Device .
+	?property_device4atv a saref:Property .
+
+	# A device accomplishes Approach to validate and has property
+	?platform saref:consistsOf ?platform_entity .
+	?platform_entity saref:accomplishes ?atv .
+	?platform_entity saref:hasProperty ?property_device4atv .
+
+	
+		# Environment property influences ATV device's
+		?property_device4atv saref:consistsOf ?property_environment .
+		
+	
+}
+
+

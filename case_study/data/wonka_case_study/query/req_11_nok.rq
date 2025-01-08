@@ -1,0 +1,66 @@
+#	ID:		1.1
+# 	Expect:	NOK
+#	
+#	Requirement: 	"All sensors must satisfy the Shannon theorem with respect to the maximum frequency of the actuators' signals."
+#	Expect result:	"Sensor & actuator pairs not satisfying requirement (including when max frequency is not known)."
+#
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#> 
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX saref: <https://saref.etsi.org/core/>
+PREFIX s4bldg: <https://saref.etsi.org/saref4bldg/>
+PREFIX s4inma: <https://saref.etsi.org/saref4inma/>
+PREFIX wonka: <http://localhost/wonka#> 
+
+SELECT DISTINCT ?platform ?sys ?actuator ?actprop ?freq_act ?fa ?fs ?freq_sens ?sensprop ?sensor
+
+
+WHERE {
+
+	# Actuators within system of interest
+	?platform a s4bldg:Building .
+	?sys a saref:Device .
+   	?actuator a saref:Actuator . 
+	
+	?platform wonka:consistsOf_system_of_interest ?sys .
+	?sys saref:consistsOf ?actuator .
+
+		# Actuator-induced properties
+   		?actprop a saref:Property . 
+
+		?actuator saref:controlsProperty ?actprop .
+
+		# Sensed properties
+		?sensor a saref:Sensor . 
+		?sensprop a saref:Property .
+
+		?platform saref:consistsOf ?sensor .
+		?sensor saref:measuresProperty ?sensprop .
+
+		# Actuator-induced property contributes to Sensed property
+		?sensprop saref:consistsOf ?actprop .
+
+
+			# Actuator has frequency
+			?freq_act a wonka:Frequency .
+
+			?actprop wonka:hasSubProperty ?freq_act .
+			?freq_act saref:hasValue ?fa .
+
+			# Sensor has frequency
+			?sensor_capability a saref:FeatureOfInterest .
+			?freq_sens a wonka:Frequency .
+
+			?sensor s4inma:hasFeatureOfInterest ?sensor_capability .
+			?sensor_capability saref:hasProperty ?freq_sens .
+			?freq_sens saref:hasValue ?fs .
+
+			FILTER NOT EXISTS {
+
+				# Sensor frequency is greater than twice the actuator's maximum signal frequency
+				FILTER (?fs >= 2 * ?fa)
+
+			}
+
+} 

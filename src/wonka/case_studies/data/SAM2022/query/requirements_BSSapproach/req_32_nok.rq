@@ -1,0 +1,58 @@
+#	ID:		3.2
+# 	Expect:	NOK
+#	
+#	For each actuator within the system of interest, there must be at least one sensor monitoring an observable property this actuator affects.
+#	+ two of such observable properties must not contribute to each other (not coupled)
+#	
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#> 
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX saref: <https://saref.etsi.org/core/>
+PREFIX s4bldg: <https://saref.etsi.org/saref4bldg/>
+PREFIX s4inma: <https://saref.etsi.org/saref4inma/>
+PREFIX wonka: <http://localhost/wonka#> 
+
+SELECT DISTINCT ?platform ?sys ?actuator ?actprop ?actuator2 ?actprop2 ?sensprop ?sensor
+
+WHERE {
+
+	# Actuators within system of interest
+	?platform a s4bldg:Building .
+	?sys a saref:Device .
+	
+	?platform wonka:consistsOf_system_of_interest ?sys .
+
+		# Actuator-induced properties
+		?actuator a saref:Actuator . 
+   		?actprop a saref:Property . 
+
+		?sys saref:consistsOf ?actuator .
+		?actuator saref:controlsProperty ?actprop .
+
+		# Actuator-induced properties 2
+		?actuator2 a saref:Actuator . 
+		?actprop2 a saref:Property . 
+		
+		?sys saref:consistsOf ?actuator2 .
+		?actuator2 saref:controlsProperty ?actprop2 .
+
+		# Sensed properties
+		?sensor a saref:Sensor . 
+		?sensprop a saref:Property .
+
+		?platform saref:consistsOf ?sensor .
+		?sensor saref:measuresProperty ?sensprop .
+
+		# Actuator-induced property contributes to Sensed property
+		?sensprop saref:consistsOf ?actprop .
+		?sensprop saref:consistsOf ?actprop2 .
+
+		
+
+			# The two actuator properties must not contribute to each other
+			?actprop saref:consistsOf ?actprop2 .
+
+		
+
+} 

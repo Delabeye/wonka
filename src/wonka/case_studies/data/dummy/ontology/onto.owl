@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://localhost/onto#"
+     xml:base="http://localhost/onto"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://localhost/onto"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://localhost/onto#C0 -->
+
+    <owl:Class rdf:about="http://localhost/onto#C0">
+        <owl:disjointWith rdf:resource="http://localhost/onto#C1"/>
+    </owl:Class>
+    
+
+
+    <!-- http://localhost/onto#C00 -->
+
+    <owl:Class rdf:about="http://localhost/onto#C00">
+        <rdfs:subClassOf rdf:resource="http://localhost/onto#C0"/>
+        <owl:disjointWith rdf:resource="http://localhost/onto#C01"/>
+    </owl:Class>
+    
+
+
+    <!-- http://localhost/onto#C000 -->
+
+    <owl:Class rdf:about="http://localhost/onto#C000">
+        <rdfs:subClassOf rdf:resource="http://localhost/onto#C00"/>
+        <owl:disjointWith rdf:resource="http://localhost/onto#C001"/>
+    </owl:Class>
+    
+
+
+    <!-- http://localhost/onto#C001 -->
+
+    <owl:Class rdf:about="http://localhost/onto#C001">
+        <rdfs:subClassOf rdf:resource="http://localhost/onto#C00"/>
+    </owl:Class>
+    
+
+
+    <!-- http://localhost/onto#C01 -->
+
+    <owl:Class rdf:about="http://localhost/onto#C01">
+        <rdfs:subClassOf rdf:resource="http://localhost/onto#C0"/>
+    </owl:Class>
+    
+
+
+    <!-- http://localhost/onto#C010 -->
+
+    <owl:Class rdf:about="http://localhost/onto#C010">
+        <rdfs:subClassOf rdf:resource="http://localhost/onto#C01"/>
+    </owl:Class>
+    
+
+
+    <!-- http://localhost/onto#C011 -->
+
+    <owl:Class rdf:about="http://localhost/onto#C011">
+        <rdfs:subClassOf rdf:resource="http://localhost/onto#C01"/>
+    </owl:Class>
+    
+
+
+    <!-- http://localhost/onto#C1 -->
+
+    <owl:Class rdf:about="http://localhost/onto#C1"/>
+    
+
+
+    <!-- http://localhost/onto#C10 -->
+
+    <owl:Class rdf:about="http://localhost/onto#C10">
+        <rdfs:subClassOf rdf:resource="http://localhost/onto#C1"/>
+        <owl:disjointWith rdf:resource="http://localhost/onto#C11"/>
+    </owl:Class>
+    
+
+
+    <!-- http://localhost/onto#C100 -->
+
+    <owl:Class rdf:about="http://localhost/onto#C100">
+        <rdfs:subClassOf rdf:resource="http://localhost/onto#C10"/>
+        <owl:disjointWith rdf:resource="http://localhost/onto#C101"/>
+    </owl:Class>
+    
+
+
+    <!-- http://localhost/onto#C101 -->
+
+    <owl:Class rdf:about="http://localhost/onto#C101">
+        <rdfs:subClassOf rdf:resource="http://localhost/onto#C10"/>
+    </owl:Class>
+    
+
+
+    <!-- http://localhost/onto#C11 -->
+
+    <owl:Class rdf:about="http://localhost/onto#C11">
+        <rdfs:subClassOf rdf:resource="http://localhost/onto#C1"/>
+    </owl:Class>
+    
+
+
+    <!-- http://localhost/onto#C110 -->
+
+    <owl:Class rdf:about="http://localhost/onto#C110">
+        <rdfs:subClassOf rdf:resource="http://localhost/onto#C11"/>
+    </owl:Class>
+    
+
+
+    <!-- http://localhost/onto#C111 -->
+
+    <owl:Class rdf:about="http://localhost/onto#C111">
+        <rdfs:subClassOf rdf:resource="http://localhost/onto#C11"/>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://localhost/onto#c0 -->
+
+    <owl:NamedIndividual rdf:about="http://localhost/onto#c0">
+        <rdf:type rdf:resource="http://localhost/onto#C0"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://localhost/onto#c00 -->
+
+    <owl:NamedIndividual rdf:about="http://localhost/onto#c00">
+        <rdf:type rdf:resource="http://localhost/onto#C00"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://localhost/onto#c000 -->
+
+    <owl:NamedIndividual rdf:about="http://localhost/onto#c000">
+        <rdf:type rdf:resource="http://localhost/onto#C000"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://localhost/onto#c1 -->
+
+    <owl:NamedIndividual rdf:about="http://localhost/onto#c1">
+        <rdf:type rdf:resource="http://localhost/onto#C1"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://localhost/onto#c10 -->
+
+    <owl:NamedIndividual rdf:about="http://localhost/onto#c10">
+        <rdf:type rdf:resource="http://localhost/onto#C10"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://localhost/onto#c100 -->
+
+    <owl:NamedIndividual rdf:about="http://localhost/onto#c100">
+        <rdf:type rdf:resource="http://localhost/onto#C100"/>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+

@@ -1,0 +1,58 @@
+
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#> 
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX saref: <https://saref.etsi.org/core/>
+PREFIX s4bldg: <https://saref.etsi.org/saref4bldg/>
+PREFIX s4inma: <https://saref.etsi.org/saref4inma/>
+PREFIX wonka: <http://localhost/wonka#> 
+
+SELECT DISTINCT * # ?platform ?sys ?actuator # ?environment_entity ?property_environment
+
+WHERE {
+
+	# Platform
+	?platform a s4bldg:Building .
+
+	# Actuators within system of interest
+	?sys a saref:Device .
+   	?actuator a saref:Actuator . 
+	
+	?platform wonka:consistsOf_system_of_interest ?sys .
+	?sys saref:consistsOf ?actuator .
+
+	FILTER NOT EXISTS {
+
+		# Actuator-induced properties
+		?actprop a saref:Property . 
+
+		?actuator saref:controlsProperty ?actprop .
+
+		# Sensed properties
+		?sensor a saref:Sensor . 
+		?sensprop a saref:Property .
+
+		?platform saref:consistsOf ?sensor .
+		?sensor saref:measuresProperty ?sensprop .
+
+		# Actuator-induced property contributes to Sensed property
+		?sensprop saref:consistsOf ?actprop .
+
+
+
+
+
+		?environment_entity a saref:FeatureOfInterest .
+		?property_environment a saref:Property .
+		
+		# Property of the environment
+		?platform wonka:consistsOf_environment ?environment_entity .
+		?environment_entity saref:hasProperty ?property_environment .
+
+
+		# ?actprop saref:consistsOf ?property_environment .
+	}
+
+
+} 

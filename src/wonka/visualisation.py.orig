@@ -1,3 +1,4 @@
+from wonka.utils import *
 
 
 def viz_nx_graph(
@@ -7,7 +8,10 @@ def viz_nx_graph(
     height="900px",
     width="1800px",
     relabel=True,
+<<<<<<< HEAD
+=======
     save_as: Path | str = None,
+>>>>>>> a0fa47f7d8e0ccbc39c04c0d9da21ff138e41712
 ):
     if relabel:
         for n, data in nx_graph.nodes(data=True):
@@ -20,6 +24,9 @@ def viz_nx_graph(
     nt.set_edge_smooth("dynamic")
     if buttons:
         nt.show_buttons()
+<<<<<<< HEAD
+    nt.show("viz_nx_graph.html")
+=======
     if isinstance(save_as, Path | str):
         save_as = str(save_as)
         save_as = save_as if save_as.endswith(".html") else save_as + ".html"
@@ -31,3 +38,4 @@ def viz_nx_graph(
     time.sleep(.01) # wait for the file to be created
     shutil.move(Path("./")/filename, save_as)
     # webbrowser.open(save_as)
+>>>>>>> a0fa47f7d8e0ccbc39c04c0d9da21ff138e41712
